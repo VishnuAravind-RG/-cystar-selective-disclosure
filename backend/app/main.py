@@ -1,6 +1,8 @@
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+import traceback
 from contextlib import asynccontextmanager
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -38,7 +40,7 @@ app.add_exception_handler(AppException, app_exception_handler)
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_URL],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -54,3 +56,14 @@ async def health_check():
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(credentials_router, prefix="/api/credentials", tags=["Credentials"])
 app.include_router(verification_router, prefix="/api/verify", tags=["Verification"])
+
+
+@app.exception_handler(Exception)
+async def debug_global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": str(exc),
+            "traceback": traceback.format_exc(),
+        },
+    )

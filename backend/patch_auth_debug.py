@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+﻿from pathlib import Path
+
+code = r'''from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 import traceback
 
@@ -34,3 +36,7 @@ async def login(request: LoginRequest):
                 "traceback": traceback.format_exc(),
             },
         )
+'''
+
+Path("app/auth/router.py").write_text(code, encoding="utf-8")
+print("auth/router.py patched")
