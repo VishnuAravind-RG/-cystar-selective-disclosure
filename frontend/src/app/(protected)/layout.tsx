@@ -15,7 +15,10 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.push("/login");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/login");
+      }
     }
   }, [user, isLoading, router]);
 
@@ -27,7 +30,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
     );
   }
 
-  if (!user) return null;
+  if (!user && !localStorage.getItem("token")) return null;
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
