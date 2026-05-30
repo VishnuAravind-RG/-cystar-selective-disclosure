@@ -1,4 +1,3 @@
-// auth guard v2
 "use client";
 
 import { useEffect } from "react";
@@ -71,7 +70,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-400 hidden sm:block">{user.email}</span>
+            <span className="text-sm text-gray-400 hidden sm:block">{user?.email}</span>
             <Button
               variant="ghost"
               size="sm"
