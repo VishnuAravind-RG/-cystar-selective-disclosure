@@ -161,7 +161,7 @@ export default function VerifyPage() {
         </Card>
 
         <p className="text-center text-xs text-gray-600">
-          CyStar Selective Disclosure & Verification — IIT Madras
+          CyStar Selective Disclosure & Verification
         </p>
       </div>
     </div>

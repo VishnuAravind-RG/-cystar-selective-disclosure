@@ -64,7 +64,7 @@ export default function Home() {
         </div>
 
         <p className="text-xs text-gray-600">
-          CyStar Summer Internship Assessment — IIT Madras
+          CyStar Selective Disclosure Platform
         </p>
       </div>
     </div>
