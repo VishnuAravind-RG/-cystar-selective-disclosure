@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
@@ -11,17 +11,22 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
   const { user, isLoading, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      const token = localStorage.getItem("token");
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !isLoading && !user) {
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
       if (!token) {
         router.push("/login");
       }
     }
-  }, [user, isLoading, router]);
+  }, [user, isLoading, router, mounted]);
 
-  if (isLoading) {
+  if (!mounted || isLoading) {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-emerald-400" />
@@ -29,7 +34,8 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
     );
   }
 
-  if (!user && !localStorage.getItem("token")) return null;
+  const hasToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  if (!user && !hasToken) return null;
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
